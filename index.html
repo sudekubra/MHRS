@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MHRS | Randevu Sistemi</title>
+    <!-- Google Fonts İçin Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- EmailJS Kütüphanesi -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function() {
+            // NOT: Buraya kendi EmailJS Public Key (User ID) bilginizi girmelisiniz.
+            // Örnek: emailjs.init("YOUR_PUBLIC_KEY");
+            emailjs.init("YOUR_PUBLIC_KEY");
+        })();
+    </script>
+</head>
+<body>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="login-wrapper">
+        <div class="card login-box">
+            <div class="logo-container">
+                <span class="material-icons logo-icon">health_and_safety</span>
+                <div class="login-header">
+                    <h1>E-Randevu</h1>
+                    <p>Güvenli ve Hızlı Sağlık Randevu Sistemi</p>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" data-tab="patient-tab">Hasta Girişi</div>
+                <div class="tab" data-tab="doctor-tab">Doktor Girişi</div>
+            </div>
+
+            <!-- Hasta Giriş Formu -->
+            <div id="patient-tab" class="tab-content active">
+                <form id="patientForm">
+                    <div class="form-group">
+                        <label class="form-label" for="patientTc">T.C. Kimlik Numarası</label>
+                        <input type="text" id="patientTc" class="form-control" placeholder="11 haneli T.C. Kimlik No" required maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="patientPassword">Şifre</label>
+                        <input type="password" id="patientPassword" class="form-control" placeholder="Şifrenizi girin" required>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <input type="checkbox" id="rememberPatient" style="width: auto;">
+                        <label for="rememberPatient" style="font-size: 0.9rem; color: var(--text-muted); cursor: pointer;">Beni Hatırla</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <span class="material-icons">login</span>
+                        Giriş Yap
+                    </button>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" id="showRegisterBtn" style="color: var(--primary); font-weight: 500; text-decoration: none;">Hesabınız yok mu? Kayıt Olun</a>
+                    </div>
+                </form>
+
+                <!-- Hasta Kayıt Formu -->
+                <form id="patientRegisterForm" class="d-none">
+                    <div class="form-group">
+                        <label class="form-label" for="regTc">T.C. Kimlik Numarası</label>
+                        <input type="text" id="regTc" class="form-control" placeholder="11 haneli T.C. Kimlik No" required maxlength="11">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="regName">Ad Soyad</label>
+                        <input type="text" id="regName" class="form-control" placeholder="Adınız Soyadınız" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="regPassword">Şifre</label>
+                        <input type="password" id="regPassword" class="form-control" placeholder="Şifre Belirleyin" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">
+                        <span class="material-icons">person_add</span>
+                        Kayıt Ol
+                    </button>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" id="showLoginBtn" style="color: var(--primary); font-weight: 500; text-decoration: none;">Zaten hesabınız var mı? Giriş Yapın</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Doktor Giriş & Kayıt Bölümü -->
+            <div id="doctor-tab" class="tab-content">
+                <!-- Doktor Giriş Formu -->
+                <form id="doctorLoginForm">
+                    <div class="form-group">
+                        <label class="form-label" for="doctorEmail">E-Posta</label>
+                        <input type="email" id="doctorEmail" class="form-control" placeholder="dr.isim@mhrs.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="doctorPassword">Şifre</label>
+                        <input type="password" id="doctorPassword" class="form-control" placeholder="Şifrenizi girin" required>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                        <input type="checkbox" id="rememberDoctor" style="width: auto;">
+                        <label for="rememberDoctor" style="font-size: 0.9rem; color: var(--text-muted); cursor: pointer;">Beni Hatırla</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <span class="material-icons">login</span>
+                        Giriş Yap
+                    </button>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" id="showDoctorRegisterBtn" style="color: var(--primary); font-weight: 500; text-decoration: none;">Doktor Kaydı mı yapacaksınız? Kayıt Olun</a>
+                    </div>
+                </form>
+
+                <!-- Doktor Kayıt Formu -->
+                <form id="doctorRegisterForm" class="d-none">
+                    <div class="form-group">
+                        <label class="form-label" for="docRegName">Ad Soyad</label>
+                        <input type="text" id="docRegName" class="form-control" placeholder="Adınız Soyadınız" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="docRegEmail">E-Posta</label>
+                        <input type="email" id="docRegEmail" class="form-control" placeholder="e-posta@mhrs.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="docRegHospital">Hastane</label>
+                        <select id="docRegHospital" class="form-control" required>
+                            <option value="">Hastane Seçiniz</option>
+                            <!-- JS ile doldurulacak -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="docRegDepartment">Bölüm</label>
+                        <select id="docRegDepartment" class="form-control" required>
+                            <option value="">Bölüm Seçiniz</option>
+                            <!-- JS ile doldurulacak -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="docRegPassword">Şifre</label>
+                        <input type="password" id="docRegPassword" class="form-control" placeholder="Şifre Belirleyin" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">
+                        <span class="material-icons">person_add</span>
+                        Doktor Olarak Kayıt Ol
+                    </button>
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <a href="#" id="showDoctorLoginBtn" style="color: var(--primary); font-weight: 500; text-decoration: none;">Zaten hesabınız var mı? Giriş Yapın</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Script Dosyaları -->
+    <script src="js/data.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
