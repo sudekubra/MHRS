@@ -1,35 +1,24 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_IMAGE = 'mhrs-app'
-        DOCKER_TAG = "v${env.BUILD_NUMBER}"
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'main', url: 'https://github.com/sudekubra/MHRS.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    bat "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
-                }
+                bat 'docker build -t mhrs-app:v4 .'
             }
         }
 
         stage('Deploy') {
             steps {
-                script {
-                    // Stop and remove existing container if running
-                    bat "docker stop ${DOCKER_IMAGE} || true"
-                    bat "docker rm ${DOCKER_IMAGE} || true"
-                    // Run the new container mapping port 3000
-                    bat "docker run -d -p 3000:3000 --name ${DOCKER_IMAGE} ${DOCKER_IMAGE}:${DOCKER_TAG}"
-                }
+                bat 'docker stop mhrs-app || exit /b 0'
+                bat 'docker rm mhrs-app || exit /b 0'
+                bat 'docker run -d --name mhrs-app -p 5000:5000 mhrs-app:v4'
             }
         }
     }
