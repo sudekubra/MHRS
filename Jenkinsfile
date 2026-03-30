@@ -26,9 +26,9 @@ pipeline {
                 script {
                     // Stop and remove existing container if running
                     bat "docker stop ${DOCKER_IMAGE} || true"
-                    sh "docker rm ${DOCKER_IMAGE} || true"
+                    bat "docker rm ${DOCKER_IMAGE} || true"
                     // Run the new container mapping port 3000
-                    sh "docker run -d -p 3000:3000 --name ${DOCKER_IMAGE} ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    bat "docker run -d -p 3000:3000 --name ${DOCKER_IMAGE} ${DOCKER_IMAGE}:${DOCKER_TAG}"
                 }
             }
         }
