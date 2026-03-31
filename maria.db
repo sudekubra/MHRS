@@ -1,0 +1,42 @@
+-- MHRS MariaDB Veritabanı Şeması
+-- Bu dosya veritabanı yapısını tanımlar. Uygulama kodunda değişiklik yapılmamıştır.
+
+CREATE DATABASE IF NOT EXISTS mhrs_db;
+USE mhrs_db;
+
+-- Hastalar Tablosu
+CREATE TABLE IF NOT EXISTS patients (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tc_no VARCHAR(11) NOT NULL UNIQUE,
+    full_name VARCHAR(100) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100),
+    phone VARCHAR(20)
+);
+
+-- Doktorlar Tablosu
+CREATE TABLE IF NOT EXISTS doctors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    availability JSON -- Doktorun uygun olduğu saatler ve günler
+);
+
+-- Randevular Tablosu
+CREATE TABLE IF NOT EXISTS appointments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patient_id INT,
+    doctor_id INT,
+    appointment_date DATE,
+    appointment_time TIME,
+    status ENUM('active', 'cancelled', 'completed') DEFAULT 'active',
+    FOREIGN KEY (patient_id) REFERENCES patients(id),
+    FOREIGN KEY (doctor_id) REFERENCES doctors(id)
+);
+
+-- Örnek Veriler
+INSERT INTO doctors (full_name, department) VALUES 
+('Dr. Ahmet Yılmaz', 'Nöroloji'),
+('Dr. Ayşe Kaya', 'Göz Hastalıkları'),
+('Dr. Mehmet Demir', 'Kardiyoloji'),
+('Dr. Elif Yıldız', 'Dahiliye');
